@@ -23,7 +23,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const response = await api.get("/auth/me");
         return response.data;
       } catch (error) {
-        console.error("Failed to fetch user data:", error);
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         return null;
       }
     },
@@ -60,5 +61,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const useAuth = () => {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if(!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };
