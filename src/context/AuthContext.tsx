@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import api from "../api/axios";
-import { useQuery } from "@tanstack/react-query";
+import api from "../api/api";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 type AuthContextType = {
   user: any;
@@ -15,6 +16,8 @@ const AuthContext = createContext<AuthContextType>(null!);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
     queryKey: ["currentUser"],
@@ -42,7 +45,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = (token: string, refreshToken: string) => {
     localStorage.setItem("accessToken", token);
     localStorage.setItem("refreshToken", refreshToken);
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     setIsAuthenticated(true);
+    queryClient.invalidateQueries({ queryKey: ["currentUser"] });
   };
 
   const logout = () => {
@@ -62,8 +67,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if(!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

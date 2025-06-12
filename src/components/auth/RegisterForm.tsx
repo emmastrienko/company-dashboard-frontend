@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import z from "zod";
-import api from "../../api/axios";
+import api from "../../api/api";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const registerSchema = z

@@ -15,7 +15,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
-import api from "../../api/axios";
+import api from "../../api/api";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
