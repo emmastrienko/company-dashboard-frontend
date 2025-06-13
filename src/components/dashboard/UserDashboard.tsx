@@ -21,6 +21,7 @@ import {
 } from "recharts";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ImageNotSupportedTwoTone } from "@mui/icons-material";
 
 type Props = {};
 
@@ -29,6 +30,7 @@ type Company = {
   name: string;
   service?: string;
   capital?: number;
+  logoUrl?: string;
 };
 
 interface PaginatedCompanies {
@@ -80,6 +82,30 @@ const UserDashboard = (props: Props) => {
               <Grid size={{ xs: 12, md: 4 }} key={company.id}>
                 <Card variant="outlined">
                   <CardContent>
+                    <Box
+                      sx={{
+                        mb: 2,
+                        height: "80px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        px: 1,
+                      }}
+                    >
+                      {company.logoUrl ? (
+                        <img
+                          src={`${process.env.REACT_APP_API_URL}${company.logoUrl}`}
+                          alt={`${company.name} logo`}
+                          style={{
+                            height: "100%",
+                            objectFit: "contain",
+                          }}
+                        />
+                      ) : (
+                        <ImageNotSupportedTwoTone fontSize="large" />
+                      )}
+                    </Box>
+
                     <Typography variant="h6">{company.name}</Typography>
                     <Typography variant="body2" color="text.secondary">
                       Service: {company.service || "N/A"}
@@ -87,6 +113,32 @@ const UserDashboard = (props: Props) => {
                     <Typography variant="body2" color="text.secondary">
                       Capital: ${company.capital || 0}
                     </Typography>
+
+                    <Box
+                      sx={{
+                        mt: 2,
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() =>
+                          navigate(`/companies/edit/${company.id}`)
+                        }
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        size="small"
+                        onClick={() => {}}
+                      >
+                        Delete
+                      </Button>
+                    </Box>
                   </CardContent>
                 </Card>
               </Grid>
@@ -138,7 +190,16 @@ const UserDashboard = (props: Props) => {
           </ResponsiveContainer>
         </>
       ) : (
-        <>
+        <Box
+          sx={{
+            minHeight: "80dvh",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+          }}
+        >
           <Typography variant="body1" color="textSecondary" mb={2}>
             Start by creating your first company.
           </Typography>
@@ -150,7 +211,7 @@ const UserDashboard = (props: Props) => {
           >
             Create Company
           </Button>
-        </>
+        </Box>
       )}
     </Container>
   );
