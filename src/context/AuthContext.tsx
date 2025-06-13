@@ -3,8 +3,11 @@ import api from "../api/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
+type RoleType = "User" | "Admin" | "SuperAdmin";
+
 type AuthContextType = {
   user: any;
+  role: RoleType | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (token: string, refreshToken: string) => void;
@@ -15,6 +18,7 @@ const AuthContext = createContext<AuthContextType>(null!);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState(null);
+  const [role, setRole] = useState<RoleType | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const queryClient = useQueryClient();
@@ -38,6 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (data) {
       setUser(data);
+      setRole(data.role);
       setIsAuthenticated(true);
     }
   }, [data]);
@@ -54,11 +59,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     setUser(null);
+    setRole(null);
     setIsAuthenticated(false);
   };
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, isLoading, login, logout }}
+      value={{ user, role, isAuthenticated, isLoading, login, logout }}
     >
       {children}
     </AuthContext.Provider>

@@ -8,7 +8,6 @@ import {
   CardContent,
   CircularProgress,
   Container,
-  Divider,
   Typography,
 } from "@mui/material";
 import Grid from "@mui/system/Grid";
@@ -20,8 +19,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import CreateCompanyForm from "./CreateCompanyForm";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
@@ -41,19 +40,14 @@ interface PaginatedCompanies {
 }
 
 const UserDashboard = (props: Props) => {
+  const navigate = useNavigate();
   const [page, setPage] = useState<number>(1);
   const limit = 12;
 
-  const {
-  data,
-  isLoading,
-  error,
-} = useQuery<PaginatedCompanies, Error>(
-  {
+  const { data, isLoading, error } = useQuery<PaginatedCompanies, Error>({
     queryKey: ["myCompanies", page],
-    queryFn: () => fetchUserCompanies(page, limit)
-  }
-);
+    queryFn: () => fetchUserCompanies(page, limit),
+  });
 
   if (isLoading)
     return (
@@ -144,14 +138,20 @@ const UserDashboard = (props: Props) => {
           </ResponsiveContainer>
         </>
       ) : (
-        <Typography variant="body1" color="textSecondary" mb={2}>
-          Start by creating your first company.
-        </Typography>
+        <>
+          <Typography variant="body1" color="textSecondary" mb={2}>
+            Start by creating your first company.
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate("/companies/create")}
+            sx={{ mb: 2 }}
+          >
+            Create Company
+          </Button>
+        </>
       )}
-
-      <Divider sx={{ my: 3 }} />
-
-      <CreateCompanyForm />
     </Container>
   );
 };
