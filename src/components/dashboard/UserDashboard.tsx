@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { fetchUserCompanies } from "../../api/companies";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { deleteCompany, fetchUserCompanies } from "../../api/companies";
 import {
   Alert,
   Box,
@@ -22,6 +22,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ImageNotSupportedTwoTone } from "@mui/icons-material";
+import { toast } from "react-toastify";
 
 type Props = {};
 
@@ -43,6 +44,7 @@ interface PaginatedCompanies {
 
 const UserDashboard = (props: Props) => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [page, setPage] = useState<number>(1);
   const limit = 12;
 
@@ -50,6 +52,20 @@ const UserDashboard = (props: Props) => {
     queryKey: ["myCompanies", page],
     queryFn: () => fetchUserCompanies(page, limit),
   });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => deleteCompany(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['myCompanies']})
+      toast.success("Company deleted successfully");
+    }
+  })
+
+  const handleDelete = (id: number) => {
+    if(window.confirm("Are you sure you want to delete this company")) {
+      deleteMutation.mutate(id);
+    }
+  }
 
   if (isLoading)
     return (
@@ -134,7 +150,7 @@ const UserDashboard = (props: Props) => {
                         variant="outlined"
                         color="error"
                         size="small"
-                        onClick={() => {}}
+                        onClick={() => {handleDelete(company.id)}}
                       >
                         Delete
                       </Button>

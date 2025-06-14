@@ -10,6 +10,7 @@ import "leaflet/dist/leaflet.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddLogo from "./components/dashboard/company/AddLogo";
+import EditCompanyForm from "./components/dashboard/company/EditCompanyForm";
 
 function App() {
   return (
@@ -41,6 +42,12 @@ function App() {
                 <AddLogo />
               </Layout>
           } />
+          <Route path="/companies/edit/:id" element={
+            <Layout>
+              <EditCompanyForm />
+            </Layout>
+          }
+          />
           <Route path="/profile" element={<div>Profile</div>} />
         </Route>
 

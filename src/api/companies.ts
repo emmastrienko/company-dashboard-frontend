@@ -27,3 +27,26 @@ export const uploadCompanyLogo = async (id: number, logoFile: File) => {
 
   return res.data;
 };
+
+export const deleteCompany = async (id: number) => {
+  const res = await api.delete(`/companies/${id}`);
+  return res.data;
+}
+
+export const updateCompany = async (
+  id: number,
+  companyData: {
+    name?: string;
+    service?: string;
+    capital?: number;
+    location?: any;
+  }
+) => {
+  const res = await api.patch(`/companies/${id}`, companyData);
+  return res.data;
+}
+
+export const getCompanyById = async (id: number) => {
+  const res = await api.get(`/companies/${id}`);
+  return res.data;
+}
