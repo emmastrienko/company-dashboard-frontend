@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddLogo from "./components/dashboard/company/AddLogo";
 import EditCompanyForm from "./components/dashboard/company/EditCompanyForm";
+import ProfilePage from "./pages/Profile/ProfilePage";
 
 function App() {
   return (
@@ -48,7 +49,11 @@ function App() {
             </Layout>
           }
           />
-          <Route path="/profile" element={<div>Profile</div>} />
+          <Route path="/profile" element={
+            <Layout>
+              <ProfilePage />
+            </Layout>
+          } />
         </Route>
 
         <Route path="*" element={<Navigate to="/dashboard" replace />} />

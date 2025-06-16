@@ -1,7 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import api from "../api/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 
 type RoleType = "User" | "Admin" | "SuperAdmin";
 
@@ -19,11 +18,18 @@ const AuthContext = createContext<AuthContextType>(null!);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState<RoleType | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading } = useQuery({
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+  }, []);
+
+  const { data, isFetching} = useQuery({
     queryKey: ["currentUser"],
     queryFn: async () => {
       try {
@@ -40,18 +46,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   useEffect(() => {
+    if (!isFetching) {
+      setAuthLoading(false);
+    }
+  }, [isFetching]);
+
+  useEffect(() => {
     if (data) {
       setUser(data);
       setRole(data.role);
-      setIsAuthenticated(true);
+    } else {
+      setUser(null);
+      setRole(null);
     }
   }, [data]);
+
+  const isAuthenticated = !!user;
 
   const login = (token: string, refreshToken: string) => {
     localStorage.setItem("accessToken", token);
     localStorage.setItem("refreshToken", refreshToken);
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    setIsAuthenticated(true);
+    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
     queryClient.invalidateQueries({ queryKey: ["currentUser"] });
   };
 
@@ -60,11 +76,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem("refreshToken");
     setUser(null);
     setRole(null);
-    setIsAuthenticated(false);
   };
   return (
     <AuthContext.Provider
-      value={{ user, role, isAuthenticated, isLoading, login, logout }}
+      value={{
+        user,
+        role,
+        isAuthenticated,
+        isLoading: authLoading,
+        login,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>

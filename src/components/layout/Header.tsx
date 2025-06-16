@@ -71,7 +71,7 @@ const Header = (props: Props) => {
             ))}
 
             <IconButton onClick={handleMenuOpen}>
-              <Avatar src={user.avatarUrl} />
+              <Avatar src={`${process.env.REACT_APP_API_URL}${user?.avatarUrl}`} />
             </IconButton>
             <Menu
               anchorEl={anchorEl}
