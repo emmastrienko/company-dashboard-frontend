@@ -56,16 +56,16 @@ const UserDashboard = (props: Props) => {
   const deleteMutation = useMutation({
     mutationFn: (id: number) => deleteCompany(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myCompanies']})
+      queryClient.invalidateQueries({ queryKey: ["myCompanies"] });
       toast.success("Company deleted successfully");
-    }
-  })
+    },
+  });
 
   const handleDelete = (id: number) => {
-    if(window.confirm("Are you sure you want to delete this company")) {
+    if (window.confirm("Are you sure you want to delete this company")) {
       deleteMutation.mutate(id);
     }
-  }
+  };
 
   if (isLoading)
     return (
@@ -134,9 +134,17 @@ const UserDashboard = (props: Props) => {
                       sx={{
                         mt: 2,
                         display: "flex",
-                        justifyContent: "space-between",
+                        justifyContent: "flex-end",
+                        gap: 2
                       }}
                     >
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => navigate(`/companies/${company.id}`)}
+                      >
+                        View
+                      </Button>
                       <Button
                         variant="outlined"
                         size="small"
@@ -150,7 +158,9 @@ const UserDashboard = (props: Props) => {
                         variant="outlined"
                         color="error"
                         size="small"
-                        onClick={() => {handleDelete(company.id)}}
+                        onClick={() => {
+                          handleDelete(company.id);
+                        }}
                       >
                         Delete
                       </Button>

@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import AddLogo from "./components/dashboard/company/AddLogo";
 import EditCompanyForm from "./components/dashboard/company/EditCompanyForm";
 import ProfilePage from "./pages/Profile/ProfilePage";
+import CompanyDetail from "./components/dashboard/company/CompanyDetail";
 
 function App() {
   return (
@@ -37,6 +38,12 @@ function App() {
                 <CreateCompanyForm />
               </Layout>
             }
+          />
+          <Route path="/companies/:id" element={
+            <Layout>
+              <CompanyDetail />
+            </Layout>
+          }
           />
           <Route path="/companies/:id/add-logo" element={
             <Layout>
