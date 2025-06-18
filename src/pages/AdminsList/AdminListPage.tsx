@@ -20,9 +20,6 @@ const AdminListPage = () => {
   const queryClient = useQueryClient();
   const [email, setEmail] = useState("");
 
-
-
-  // Fetch admins - ensure the returned data is an array or default to []
   const {
     data: admins,
     isLoading,
