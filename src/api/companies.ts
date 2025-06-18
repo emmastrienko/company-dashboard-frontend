@@ -5,6 +5,23 @@ export const fetchUserCompanies = async (page = 1, limit = 10) => {
   return res.data;
 };
 
+export const fetchAllCompanies = async ({
+  page = 1,
+  limit = 10,
+  sortBy = "id",
+  order = "ASC",
+}: {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  order?: "ASC" | "DESC";
+}) => {
+  const res = await api.get("/companies", {
+    params: { page, limit, sortBy, order },
+  });
+  return res.data;
+};
+
 export const createCompany = async (companyData: {
   name: string;
   service?: string;
@@ -31,7 +48,7 @@ export const uploadCompanyLogo = async (id: number, logoFile: File) => {
 export const deleteCompany = async (id: number) => {
   const res = await api.delete(`/companies/${id}`);
   return res.data;
-}
+};
 
 export const updateCompany = async (
   id: number,
@@ -44,9 +61,9 @@ export const updateCompany = async (
 ) => {
   const res = await api.patch(`/companies/${id}`, companyData);
   return res.data;
-}
+};
 
 export const getCompanyById = async (id: number) => {
   const res = await api.get(`/companies/${id}`);
   return res.data;
-}
+};

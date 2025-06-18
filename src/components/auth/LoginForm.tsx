@@ -20,6 +20,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useAuth } from "../../context/AuthContext";
 
 type Props = {};
 
@@ -42,6 +43,7 @@ const loginUser = async (
 
 const LoginForm = (props: Props) => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -56,11 +58,14 @@ const LoginForm = (props: Props) => {
 
   const mutation = useMutation({
     mutationFn: loginUser,
-    onSuccess: (data) => {
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      toast.success("Login successful!");
-      navigate("/dashboard");
+    onSuccess: async (data) => {
+      try {
+        await login(data.accessToken, data.refreshToken);
+        toast.success("Login successful!");
+        navigate("/dashboard");
+      } catch (error) {
+        toast.error("Login failed during user fetch");
+      }
     },
     onError: (error: any) => {
       if (error.response) {

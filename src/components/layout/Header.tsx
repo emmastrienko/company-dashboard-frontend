@@ -30,13 +30,13 @@ const Header = (props: Props) => {
 
   const navItems = {
     SuperAdmin: [
-      { label: "Dashboard", path: "/dashboard" },
+      { label: "Create Company", path: "/companies/create" },
       { label: "Companies", path: "/companies" },
       { label: "Admins", path: "/admins" },
       { label: "History", path: "/history" },
     ],
     Admin: [
-      { label: "Dashboard", path: "/dashboard" },
+      { label: "Create Company", path: "/companies/create" },
       { label: "Companies", path: "/companies" },
       { label: "History", path: "/history" },
     ],

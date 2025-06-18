@@ -13,6 +13,8 @@ import AddLogo from "./components/dashboard/company/AddLogo";
 import EditCompanyForm from "./components/dashboard/company/EditCompanyForm";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import CompanyDetail from "./components/dashboard/company/CompanyDetail";
+import AllCompanies from "./components/dashboard/company/AllCompanies";
+import AdminListPage from "./pages/AdminsList/AdminListPage";
 
 function App() {
   return (
@@ -39,28 +41,60 @@ function App() {
               </Layout>
             }
           />
-          <Route path="/companies/:id" element={
-            <Layout>
-              <CompanyDetail />
-            </Layout>
-          }
+          <Route
+            path="/companies/:id"
+            element={
+              <Layout>
+                <CompanyDetail />
+              </Layout>
+            }
           />
-          <Route path="/companies/:id/add-logo" element={
-            <Layout>
+          <Route
+            path="/companies/:id/add-logo"
+            element={
+              <Layout>
                 <AddLogo />
               </Layout>
-          } />
-          <Route path="/companies/edit/:id" element={
-            <Layout>
-              <EditCompanyForm />
-            </Layout>
-          }
+            }
           />
-          <Route path="/profile" element={
-            <Layout>
-              <ProfilePage />
-            </Layout>
-          } />
+          <Route
+            path="/companies/edit/:id"
+            element={
+              <Layout>
+                <EditCompanyForm />
+              </Layout>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <Layout>
+                <ProfilePage />
+              </Layout>
+            }
+          />
+        </Route>
+
+        <Route element={<PrivateRoute roles={["Admin", "SuperAdmin"]} />}>
+          <Route
+            path="/companies"
+            element={
+              <Layout>
+                <AllCompanies />
+              </Layout>
+            }
+          />
+        </Route>
+
+        <Route element={<PrivateRoute roles={["SuperAdmin"]} />}>
+          <Route
+            path="/admins"
+            element={
+              <Layout>
+                <AdminListPage />
+              </Layout>
+            }
+          />
         </Route>
 
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
