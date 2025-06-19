@@ -15,6 +15,8 @@ import ProfilePage from "./pages/Profile/ProfilePage";
 import CompanyDetail from "./components/dashboard/company/CompanyDetail";
 import AllCompanies from "./components/dashboard/company/AllCompanies";
 import AdminListPage from "./pages/AdminsList/AdminListPage";
+import { UserHistoryPage } from "./pages/ActionHistory/UserHistoryPage";
+import { AdminHistoryPage } from "./pages/ActionHistory/AdminHistoryPage";
 
 function App() {
   return (
@@ -73,6 +75,14 @@ function App() {
               </Layout>
             }
           />
+          <Route
+            path="/history"
+            element={
+              <Layout>
+                <UserHistoryPage />
+              </Layout>
+            }
+          />
         </Route>
 
         <Route element={<PrivateRoute roles={["Admin", "SuperAdmin"]} />}>
@@ -81,6 +91,14 @@ function App() {
             element={
               <Layout>
                 <AllCompanies />
+              </Layout>
+            }
+          />
+          <Route
+            path="/history/all"
+            element={
+              <Layout>
+                <AdminHistoryPage />
               </Layout>
             }
           />

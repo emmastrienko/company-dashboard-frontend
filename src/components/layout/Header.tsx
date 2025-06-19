@@ -33,12 +33,14 @@ const Header = (props: Props) => {
       { label: "Create Company", path: "/companies/create" },
       { label: "Companies", path: "/companies" },
       { label: "Admins", path: "/admins" },
-      { label: "History", path: "/history" },
+      { label: "History", path: "/history/all" },
+      { label: "My History", path: "/history" },
     ],
     Admin: [
       { label: "Create Company", path: "/companies/create" },
       { label: "Companies", path: "/companies" },
-      { label: "History", path: "/history" },
+      { label: "History", path: "/history/all" },
+      { label: "My History", path: "/history" },
     ],
     User: [
       { label: "Create Company", path: "/companies/create" },
